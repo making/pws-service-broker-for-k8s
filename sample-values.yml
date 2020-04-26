@@ -1,0 +1,7 @@
+#@data/values
+---
+cf_api: https://api.run.pivotal.io
+cf_username: 
+cf_password: 
+cf_organization_guid: 
+cf_space_guid: 

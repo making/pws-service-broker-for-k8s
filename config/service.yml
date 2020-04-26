@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: pws-service-broker
+  name: pws-service-broker
+  namespace: pws-service-broker
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: pws-service-broker
+  type: ClusterIP

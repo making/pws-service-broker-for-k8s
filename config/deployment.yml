@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pws-service-broker
+  name: pws-service-broker
+  namespace: pws-service-broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pws-service-broker
+  template:
+    metadata:
+      labels:
+        app: pws-service-broker
+    spec:
+      containers:
+      - image: starkandwayne/cf-marketplace-servicebroker:0.1.6
+        name: cf-marketplace-servicebroker
+        env:
+        - name: PORT
+          value: "8080"
+        - name: CF_API
+          valueFrom:
+            secretKeyRef:
+              name: pws-service-broker
+              key: cf_api
+        - name: CF_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: pws-service-broker
+              key: cf_username
+        - name: CF_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pws-service-broker
+              key: cf_password
+        - name: CF_ORGANIZATION_GUID
+          valueFrom:
+            secretKeyRef:
+              name: pws-service-broker
+              key: cf_organization_guid
+        - name: CF_SPACE_GUID
+          valueFrom:
+            secretKeyRef:
+              name: pws-service-broker
+              key: cf_space_guid      
+        resources:
+          limits:
+            memory: 64Mi
+          requests:
+            memory: 64Mi
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP            
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
